@@ -22,9 +22,7 @@ class AudioManager {
         this.sounds.gameOver = this.createGameOverSound();
     }
     
-    createBackgroundMusic() {
-        this.backgroundMusic = this.createTetrisTheme();
-    }
+    // Background music removed as requested
     
     createDropSound() {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -126,42 +124,7 @@ class AudioManager {
         return { audioContext, oscillator, gainNode };
     }
     
-    createTetrisTheme() {
-        // Create a simple Tetris-like melody using Web Audio API
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const notes = [
-            { freq: 523.25, duration: 0.5 }, // C
-            { freq: 659.25, duration: 0.5 }, // E
-            { freq: 783.99, duration: 0.5 }, // G
-            { freq: 1046.50, duration: 0.5 }, // C (high)
-            { freq: 783.99, duration: 0.5 }, // G
-            { freq: 659.25, duration: 0.5 }, // E
-            { freq: 523.25, duration: 1.0 }, // C
-        ];
-        
-        let currentTime = audioContext.currentTime;
-        
-        notes.forEach(note => {
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.setValueAtTime(note.freq, currentTime);
-            oscillator.type = 'square';
-            
-            gainNode.gain.setValueAtTime(0.1, currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, currentTime + note.duration);
-            
-            oscillator.start(currentTime);
-            oscillator.stop(currentTime + note.duration);
-            
-            currentTime += note.duration;
-        });
-        
-        return { audioContext, notes, currentTime };
-    }
+    // Tetris theme method removed as background music is no longer needed
     
     playSound(soundName) {
         if (this.isMuted) return;
@@ -190,40 +153,10 @@ class AudioManager {
         }
     }
     
-    startBackgroundMusic() {
-        if (this.isMuted) return;
-        
-        // Start the Tetris theme loop
-        this.loopBackgroundMusic();
-    }
-    
-    loopBackgroundMusic() {
-        if (this.isMuted) return;
-        
-        this.createTetrisTheme();
-        
-        // Loop every 4 seconds
-        setTimeout(() => {
-            this.loopBackgroundMusic();
-        }, 4000);
-    }
-    
-    stopBackgroundMusic() {
-        this.isMuted = true;
-    }
-    
-    resumeBackgroundMusic() {
-        this.isMuted = false;
-        this.startBackgroundMusic();
-    }
+    // Background music methods removed as requested
     
     toggleMute() {
         this.isMuted = !this.isMuted;
-        if (this.isMuted) {
-            this.stopBackgroundMusic();
-        } else {
-            this.resumeBackgroundMusic();
-        }
         return this.isMuted;
     }
     

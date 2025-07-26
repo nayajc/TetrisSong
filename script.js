@@ -105,7 +105,7 @@ class TetrisGame {
                 break;
             case 'ArrowDown':
                 e.preventDefault();
-                this.movePiece(0, 1);
+                this.hardDrop();
                 break;
             case 'ArrowUp':
                 e.preventDefault();
@@ -131,9 +131,6 @@ class TetrisGame {
         this.spawnPiece();
         this.gameLoop();
         this.updateUI();
-        
-        // Start background music
-        this.audioManager.startBackgroundMusic();
     }
     
     togglePause() {
@@ -212,6 +209,15 @@ class TetrisGame {
             this.currentPiece.shape = rotated;
             this.drawBoard();
             this.audioManager.playSound('rotate');
+        }
+    }
+    
+    hardDrop() {
+        if (!this.gameRunning || this.gamePaused) return;
+        
+        // Move piece down until it collides
+        while (this.movePiece(0, 1)) {
+            // Continue moving down until collision
         }
     }
     
